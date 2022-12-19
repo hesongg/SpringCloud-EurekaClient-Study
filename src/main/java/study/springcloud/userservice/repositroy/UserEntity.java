@@ -23,6 +23,6 @@ public class UserEntity {
     @Column(nullable = false, length = 50, unique = true)
     private String userId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 60)
     private String encryptedPwd;
 }
