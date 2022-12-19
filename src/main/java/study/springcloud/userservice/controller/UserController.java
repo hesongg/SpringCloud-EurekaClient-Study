@@ -3,6 +3,7 @@ package study.springcloud.userservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +14,18 @@ import study.springcloud.userservice.vo.RequestUser;
 import study.springcloud.userservice.vo.ResponseUser;
 
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/user-service")
 @RestController
 public class UserController {
 
     private final UserService userService;
     private final Greeting greeting;
+    private final Environment environment;
 
     @GetMapping("/health-check")
     public String status() {
-        return "It's working in User Service";
+        return String.format("It's Working in User Service on Port %s",
+                environment.getProperty("local.server.port"));
     }
 
     @GetMapping("/welcome")
