@@ -8,10 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.springcloud.userservice.dto.UserDto;
+import study.springcloud.userservice.repositroy.UserEntity;
 import study.springcloud.userservice.service.UserService;
 import study.springcloud.userservice.vo.Greeting;
 import study.springcloud.userservice.vo.RequestUser;
 import study.springcloud.userservice.vo.ResponseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/user-service")
@@ -45,5 +49,24 @@ public class UserController {
         ResponseUser responseUser = mapper.map(returnUserDto, ResponseUser.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<ResponseUser>> getUsers() {
+        Iterable<UserEntity> userList = userService.getUserByAll();
+
+        List<ResponseUser> result = new ArrayList<>();
+        userList.forEach(user -> result.add(new ModelMapper().map(user, ResponseUser.class)));
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<ResponseUser> getUser(@PathVariable String userId) {
+        UserDto userDto = userService.getUserByUserId(userId);
+
+        ResponseUser responseUser = new ModelMapper().map(userDto, ResponseUser.class);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
 }

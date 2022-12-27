@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import study.springcloud.userservice.dto.UserDto;
 import study.springcloud.userservice.repositroy.UserEntity;
 import study.springcloud.userservice.repositroy.UserRepository;
+import study.springcloud.userservice.vo.ResponseOrder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -34,5 +37,27 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
 
         return mapper.map(userEntity, UserDto.class);
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
+
+        List<ResponseOrder> orders = new ArrayList<>();
+        userDto.setOrders(orders);
+
+        return userDto;
+    }
+
+    @Override
+    public Iterable<UserEntity> getUserByAll() {
+        return userRepository.findAll();
     }
 }
