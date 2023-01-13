@@ -1,9 +1,10 @@
 package study.springcloud.userservice.service;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import study.springcloud.userservice.dto.UserDto;
 import study.springcloud.userservice.repositroy.UserEntity;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     UserDto createUser(UserDto userDto);
 
